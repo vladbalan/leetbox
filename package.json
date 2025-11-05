@@ -1,0 +1,19 @@
+{
+  "name": "leetbox",
+  "version": "1.0.0",
+  "description": "A leetcode sandbox - Practice algorithm problems using Typescript with quick testing and micro‑benchmarks.",
+  "bin": {
+    "leetbox": "bin/leetbox.js"
+  },
+  "scripts": {
+    "latest": "tsx ./scripts/latest.ts",
+    "compare": "tsx ./scripts/compare.ts"
+  },
+  "author": "Vlad Balan",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22",
+    "tsx": "^4",
+    "typescript": "^5"
+  }
+}

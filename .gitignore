@@ -1,0 +1,33 @@
+# Node dependencies
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# TypeScript build artifacts
+dist/
+build/
+*.tsbuildinfo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Problems except binarySearch and twoSum
+problems/*
+!problems/binarySearch/
+!problems/twoSum/
+
+# Other
+.idea/
+.vscode/
+.res/
