@@ -7,27 +7,24 @@ async function main() {
   if (!pick) return;
   switch (pick) {
     case 'latest':
-      // @ts-ignore NodeNext+tsx
-      await import('./latest.ts');
+      await import('./latest.js');
       return;
     case 'compare':
-      // @ts-ignore NodeNext+tsx
-      await import('./compare.ts');
+      await import('./compare.js');
       return;
     case 'add':
-      // @ts-ignore NodeNext+tsx
-      await import('./add.ts');
+      await import('./add.js');
       return;
     case 'remove':
-      // @ts-ignore NodeNext+tsx
-      await import('./remove.ts');
+      await import('./remove.js');
       return;
     default:
       return;
   }
 }
 
-main().catch((err) => {
-  console.error(err?.message || err);
+main().catch((err: unknown) => {
+  const message = err instanceof Error ? err.message : String(err);
+  console.error(message);
   process.exit(1);
 });

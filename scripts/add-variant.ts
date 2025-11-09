@@ -54,7 +54,7 @@ function variantTemplate(fnName: string, returnType: 'number' | 'number[]' | 'un
   const isArray = returnType === 'number[]';
   const rt = returnType === 'unknown' ? 'number' : returnType; // fall back to number to align with existing patterns
   const defaultReturn = isArray ? '[-1, -1]' : '-1';
-  return `/**\n * ${fnName}: new variant\n * Time: O(1) placeholder, Space: O(1) placeholder\n */\nexport function ${fnName}(arr: number[], target: number): ${rt} {\n  // TODO: implement\n  // Keep signature aligned with other variants (arr: number[], target: number)\n  return ${defaultReturn} as any;\n}\n`;
+  return `/**\n * ${fnName}: new variant\n * Time: O(1) placeholder, Space: O(1) placeholder\n */\nexport function ${fnName}(arr: number[], target: number): ${rt} {\n  // TODO: implement\n  // Keep signature aligned with other variants (arr: number[], target: number)\n  return ${defaultReturn};\n}\n`;
 }
 
 async function addImportAndImplementation(implIndexPath: string, camel: string): Promise<void> {
@@ -148,7 +148,11 @@ async function main() {
   console.log('\nNext steps: implement your algorithm in the new file.');
 }
 
-main().catch((err) => {
-  console.error(err instanceof Error ? err.message : err);
+main().catch((err: unknown) => {
+  if (err instanceof Error) {
+    console.error(`Error: ${err.message}`);
+  } else {
+    console.error(`Unknown error: ${String(err)}`);
+  }
   process.exit(1);
 });

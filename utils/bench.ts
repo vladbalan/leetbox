@@ -1,55 +1,60 @@
 import { TestCase } from "./testRunner";
 
-// Minimal env typings to avoid adding @types/node
-declare const process: any;
-declare const performance: { now: () => number } | undefined;
+// Use proper Node imports since @types/node is already in devDependencies
+import { performance } from "node:perf_hooks";
+import { hrtime } from "node:process";
+import { WriteStream } from "node:tty";
 
 export interface Implementation<A, B, R> {
-  name: string;
-  fn: (a: A, b: B) => R;
+  readonly name: string;
+  readonly fn: (a: A, b: B) => R;
 }
 
 export interface BenchOptions {
-  iterations?: number; // measured iterations (batches across all test cases)
-  warmup?: number; // warmup iterations (not measured)
-  quiet?: boolean; // temporarily silence console during runs
+  readonly iterations?: number; // measured iterations (batches across all test cases)
+  readonly warmup?: number; // warmup iterations (not measured)
+  readonly quiet?: boolean; // temporarily silence console during runs
 }
 
 function nowNs(): bigint {
-  if (typeof process !== "undefined" && process?.hrtime?.bigint) {
-    return process.hrtime.bigint();
-  }
-  const ms = typeof performance !== "undefined" && performance ? performance.now() : Date.now();
-  return BigInt(Math.floor(ms * 1_000_000));
+  return hrtime.bigint();
 }
 
 function nsToMs(ns: bigint): number {
   return Number(ns) / 1_000_000;
 }
 
+/**
+ * Runs a function with console output suppressed by temporarily redirecting
+ * stdout/stderr write operations. More robust than overwriting console methods.
+ */
 function withQuiet<T>(quiet: boolean | undefined, run: () => T): T {
   if (!quiet) return run();
-  const original = { ...console } as Partial<typeof console> & Record<string, any>;
+  
+  // Store original write functions
+  const stdoutWrite = process.stdout.write.bind(process.stdout);
+  const stderrWrite = process.stderr.write.bind(process.stderr);
+  
+  // Create no-op write function
+  const noopWrite = () => true;
+  
   try {
-    // no-op common console methods
-    const noop = () => {};
-    (console as any).log = noop;
-    (console as any).info = noop;
-    (console as any).warn = noop;
-    (console as any).error = noop;
-    (console as any).debug = noop;
+    // Redirect writes to no-op
+    process.stdout.write = noopWrite as typeof process.stdout.write;
+    process.stderr.write = noopWrite as typeof process.stderr.write;
     return run();
   } finally {
-    // restore
-    Object.assign(console, original);
+    // Restore original write functions
+    process.stdout.write = stdoutWrite;
+    process.stderr.write = stderrWrite;
   }
 }
 
 export function runComparison<A, B, R, TInput>(
   title: string,
-  implementations: Implementation<A, B, R>[],
-  testCases: TestCase<TInput, R>[],
-  extractArgs: (input: TInput) => [A, B],
+  implementations: readonly Implementation<A, B, R>[],
+  testCases: readonly TestCase<TInput, R>[],
+  extractArgs: (input: TInput) => readonly [A, B],
   options: BenchOptions = {}
 ): void {
   const iterations = options.iterations ?? 30;

@@ -2,18 +2,18 @@
  * Generic test case interface
  */
 export interface TestCase<TInput, TExpected> {
-  input: TInput;
-  expected: TExpected;
-  description?: string;
+  readonly input: TInput;
+  readonly expected: TExpected;
+  readonly description?: string;
 }
 
 /**
  * Test result interface
  */
 export interface TestResult {
-  passed: number;
-  failed: number;
-  total: number;
+  readonly passed: number;
+  readonly failed: number;
+  readonly total: number;
 }
 
 /**
@@ -27,7 +27,7 @@ export interface TestResult {
 export function runTests<TInput, TExpected>(
   solutionName: string,
   solution: (input: TInput) => TExpected,
-  testCases: TestCase<TInput, TExpected>[],
+  testCases: readonly TestCase<TInput, TExpected>[],
   comparator?: (result: TExpected, expected: TExpected) => boolean
 ): TestResult {
   console.log(`\n😬 === ${solutionName} Tests Started === 😬\n`);

@@ -40,7 +40,11 @@ async function main() {
   console.log('✅ Problem removed: problems/' + problem);
 }
 
-main().catch((err) => {
-  console.error(err instanceof Error ? err.message : err);
+main().catch((err: unknown) => {
+  if (err instanceof Error) {
+    console.error(`Error: ${err.message}`);
+  } else {
+    console.error(`Unknown error: ${String(err)}`);
+  }
   process.exit(1);
 });

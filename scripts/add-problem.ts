@@ -25,7 +25,13 @@ async function ensureDir(p: string) {
 }
 
 async function fileExists(p: string): Promise<boolean> {
-  try { await fs.access(p); return true; } catch { return false; }
+  try { 
+    await fs.access(p); 
+    return true; 
+  } catch (err: unknown) { 
+    // Access failed - file doesn't exist or no permission
+    return false; 
+  }
 }
 
 function problemIndexTs(problemName: string): string {
@@ -86,7 +92,14 @@ async function main() {
   console.log(' - Implement the naive variant and add more variants as needed.');
 }
 
-main().catch((err) => {
-  console.error(err instanceof Error ? err.message : err);
+main().catch((err: unknown) => {
+  if (err instanceof Error) {
+    console.error(`Error: ${err.message}`);
+    if (err.stack) {
+      console.error(`Stack: ${err.stack}`);
+    }
+  } else {
+    console.error(`Unknown error: ${String(err)}`);
+  }
   process.exit(1);
 });

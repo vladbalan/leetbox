@@ -7,19 +7,18 @@ async function main() {
   if (!pick) return;
   switch (pick) {
     case 'variant':
-      // @ts-ignore: tsx runtime allows importing .ts with NodeNext
-      await import('./add-variant.ts');
+      await import('./add-variant.js');
       return;
     case 'problem':
-      // @ts-ignore: tsx runtime allows importing .ts with NodeNext
-      await import('./add-problem.ts');
+      await import('./add-problem.js');
       return;
     default:
       return;
   }
 }
 
-main().catch((err) => {
-  console.error(err?.message || err);
+main().catch((err: unknown) => {
+  const message = err instanceof Error ? err.message : String(err);
+  console.error(message);
   process.exit(1);
 });

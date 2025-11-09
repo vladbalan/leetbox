@@ -126,9 +126,13 @@ async function main() {
     try {
       await fs.unlink(filePath);
       console.log(`Deleted file: ${path.relative(repoRoot, filePath)}`);
-    } catch (e: any) {
-      if (e?.code !== 'ENOENT') throw e;
-      console.log('File already missing, continuing.');
+    } catch (e: unknown) {
+      // Check if it's a file system error with ENOENT code
+      if (e && typeof e === 'object' && 'code' in e && e.code === 'ENOENT') {
+        console.log('File already missing, continuing.');
+      } else {
+        throw e;
+      }
     }
   }
 
@@ -147,7 +151,11 @@ async function main() {
   console.log('✅ Variant removed.');
 }
 
-main().catch((err) => {
-  console.error(err instanceof Error ? err.message : err);
+main().catch((err: unknown) => {
+  if (err instanceof Error) {
+    console.error(`Error: ${err.message}`);
+  } else {
+    console.error(`Unknown error: ${String(err)}`);
+  }
   process.exit(1);
 });

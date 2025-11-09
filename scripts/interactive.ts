@@ -1,15 +1,11 @@
 export {};
 
-// Minimal env typings to avoid adding @types/node
-declare const process: any;
-declare function require(name: string): any;
+import * as readline from "node:readline";
+import { stdin } from "node:process";
 
 type Key = { name?: string; sequence?: string; ctrl?: boolean };
 
 export async function selectFromList(items: string[], opts?: { title?: string }): Promise<string | undefined> {
-  const readline: any = require("readline");
-  const stdin: any = process.stdin;
-
   let filter = "";
   let index = 0;
 
@@ -49,7 +45,7 @@ export async function selectFromList(items: string[], opts?: { title?: string })
     if (stdin.isTTY) stdin.setRawMode(true);
     if (stdin.resume) stdin.resume();
 
-    const onKeypress = (_str: any, key: Key) => {
+    const onKeypress = (_str: string, key: Key) => {
       if (!key) return;
       const list = filtered();
       switch (key.name) {

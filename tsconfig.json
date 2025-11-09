@@ -7,7 +7,13 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "types": ["node"]
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@utils/*": ["utils/*"],
+      "@problems/*": ["problems/*"],
+      "@scripts/*": ["scripts/*"]
+    }
   },
   "include": ["./**/*.ts"],
   "exclude": ["node_modules", "dist"]

@@ -5,11 +5,10 @@ export {};
 // Example:
 //   npm run latest -- searchRotated
 
-// Minimal env typings to avoid adding @types/node
-declare const process: any;
-declare function require(name: string): any;
-declare const __dirname: string;
 import { selectFromList } from "./interactive";
+import process, { argv, cwd, exit } from "node:process";
+import { readdir } from "node:fs/promises";
+import { join } from "node:path";
 
 async function main() {
   let problem = getProblemName();
@@ -30,32 +29,45 @@ async function main() {
 
   try {
     await import(`../problems/${problem}/index.ts`);
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error(`❌ Could not run latest for problem "${problem}".`);
-    console.error(err?.message || err);
+    console.error(err instanceof Error ? err.message : String(err));
     await printUsageAndExit();
   }
 }
 
 function getProblemName(): string | undefined {
   // Prefer positional args
-  const argv = process.argv?.slice(2) ?? [];
-  if (argv[0]) return String(argv[0]);
+  const args = argv?.slice(2) ?? [];
+  if (args[0]) return String(args[0]);
 
   // Attempt to parse npm_config_argv (best-effort support for "npm run latest problem")
   try {
     const raw = process.env?.npm_config_argv;
     if (!raw) return undefined;
-    const parsed = JSON.parse(raw);
-    const original: string[] = parsed?.original ?? [];
+    
+    const parsed: unknown = JSON.parse(raw);
+    if (!isValidNpmConfigArgv(parsed)) return undefined;
+    
+    const original: string[] = parsed.original ?? [];
     // Find the first token that isn't npm/run boilerplate
     const skip = new Set(["run", "run-script", "latest", "--", "-s", "--silent"]);
     const candidate = original.find((t: string) => !skip.has(t));
     if (candidate) return candidate;
-  } catch {
-    // ignore
+  } catch (err: unknown) {
+    // JSON parse failed or env variable invalid - silently ignore
   }
   return undefined;
+}
+
+function isValidNpmConfigArgv(value: unknown): value is { original?: string[] } {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    (!("original" in value) ||
+      (Array.isArray((value as { original?: unknown }).original) &&
+        (value as { original: unknown[] }).original.every((v) => typeof v === "string")))
+  );
 }
 
 async function printUsageAndExit(reason?: string) {
@@ -70,16 +82,15 @@ async function printUsageAndExit(reason?: string) {
       for (const p of problems) console.log(`  - ${p}`);
     }
   } catch {}
+  exit(1);
 }
 
 async function listProblems(): Promise<string[]> {
-  const fs: any = require("fs");
-  const path: any = require("path");
-  const base = path.resolve(__dirname, "../problems");
-  const entries = fs.readdirSync(base, { withFileTypes: true });
+  const base = join(cwd(), "problems");
+  const entries = await readdir(base, { withFileTypes: true });
   return entries
-    .filter((e: any) => e.isDirectory?.())
-    .map((e: any) => e.name)
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name)
     .sort();
 }
 
