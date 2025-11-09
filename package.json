@@ -8,17 +8,23 @@
 	"scripts": {
 		"latest": "tsx ./scripts/latest.ts",
 		"compare": "tsx ./scripts/compare.ts",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:coverage": "vitest run --coverage",
 		"lint": "biome lint .",
 		"format": "biome format --write .",
 		"check": "biome check --write .",
-		"ci": "biome ci ."
+		"ci": "biome ci . && npm test"
 	},
 	"author": "Vlad Balan",
 	"license": "MIT",
 	"devDependencies": {
 		"@biomejs/biome": "2.3.4",
 		"@types/node": "^22",
+		"@vitest/coverage-v8": "^4.0.8",
+		"@vitest/ui": "^4.0.8",
 		"tsx": "^4",
-		"typescript": "^5"
+		"typescript": "^5",
+		"vitest": "^4.0.8"
 	}
 }
