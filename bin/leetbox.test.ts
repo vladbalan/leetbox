@@ -58,7 +58,7 @@ describe("CLI", () => {
 
 	describe("compare command", () => {
 		it("should accept compare command", async () => {
-			const result = await runCLI(["compare", "twoSum"])
+			const result = await runCLI(["compare", "binarySearch"])
 			// Should not have "Unknown command" error
 			expect(result.stderr).not.toContain("Unknown command")
 		})
@@ -66,7 +66,7 @@ describe("CLI", () => {
 
 	describe("latest command", () => {
 		it("should accept latest command", async () => {
-			const result = await runCLI(["latest", "twoSum"])
+			const result = await runCLI(["latest", "binarySearch"])
 			expect(result.stderr).not.toContain("Unknown command")
 		})
 	})
