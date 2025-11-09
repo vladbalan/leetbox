@@ -49,6 +49,12 @@ npm run compare -- binarySearch
 # Omit the name to get an interactive picker
 npm run latest
 npm run compare
+
+# Code quality (BiomeJS)
+npm run lint      # Check for linting issues
+npm run format    # Format code
+npm run check     # Format + lint + auto-fix
+npm run ci        # CI-mode check (no fixes applied)
 ```
 
 ## Project layout

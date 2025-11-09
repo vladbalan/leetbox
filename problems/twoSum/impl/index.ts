@@ -1,8 +1,9 @@
-import { naiveVariant } from "./variants/naive";
-import { mapVariant } from "./variants/map";
-import { mapAgainVariant } from "./variants/mapAgain";
-import { usingObjectVariant } from "./variants/usingObject";
-export { testCases } from "./testCases";
+import { mapVariant } from "./variants/map"
+import { mapAgainVariant } from "./variants/mapAgain"
+import { naiveVariant } from "./variants/naive"
+import { usingObjectVariant } from "./variants/usingObject"
+
+export { testCases } from "./testCases"
 
 // Registry of implementations (newer version last)
 export const implementations = [
@@ -10,7 +11,6 @@ export const implementations = [
 	{ name: "map", fn: (arr: number[], target: number) => mapVariant(arr, target) },
 	{ name: "usingObject", fn: (arr: number[], target: number) => usingObjectVariant(arr, target) },
 	{ name: "mapAgain", fn: (arr: number[], target: number) => mapAgainVariant(arr, target) },
-];
+]
 
-export const latest = implementations[implementations.length - 1];
-
+export const latest = implementations[implementations.length - 1]
