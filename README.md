@@ -55,7 +55,33 @@ npm run lint      # Check for linting issues
 npm run format    # Format code
 npm run check     # Format + lint + auto-fix
 npm run ci        # CI-mode check (no fixes applied)
+
+# Testing
+npm test              # Run all tests
+npm run test:watch    # Watch mode
+npm run test:coverage # Generate coverage report
 ```
+
+## CI/CD
+
+GitHub Actions workflows are configured for:
+
+- **CI** (`.github/workflows/ci.yml`): Runs on push/PR
+  - Linting and formatting checks
+  - Tests across Node.js 18.x, 20.x, 22.x
+  - Coverage report generation
+
+- **Code Quality** (`.github/workflows/code-quality.yml`): Runs on PRs
+  - Coverage reports on pull requests
+  - TypeScript type checking
+
+- **Release** (`.github/workflows/release.yml`): Runs on version tags
+  - Triggers on version tags (v*.*.*)
+  - Creates GitHub releases with auto-generated notes
+
+- **Dependabot** (`.github/dependabot.yml`):
+  - Weekly dependency updates
+  - GitHub Actions version updates
 
 ## Project layout
 
@@ -114,6 +140,7 @@ The scaffolder writes `impl/variants/<camel>.ts` with a `<camel>Variant` functio
 - [x] Time complexity benchmarks
 - [ ] Space complexity benchmarks
 - [x] TypeScript types for inputs and expected outputs (clean up the `any`'s)
+- [x] CI/CD workflows: linting, formatting, tests, coverage, releases
 
 ## Master the fundamentals
 
