@@ -36,7 +36,7 @@ leetbox --help
 
 ## Local dev
 
-Prerequisites: Node 22+ (and dev deps installed locally).
+Prerequisites: Node 20+ (and dev deps installed locally).
 
 ```pwsh
 # Install dev deps used by the TypeScript runners
@@ -68,7 +68,7 @@ GitHub Actions workflows are configured for:
 
 - **CI** (`.github/workflows/ci.yml`): Runs on push/PR
   - Linting and formatting checks
-  - Tests across Node.js 18.x, 20.x, 22.x
+  - Tests across Node.js 20.x, 22.x
   - Coverage report generation
 
 - **Code Quality** (`.github/workflows/code-quality.yml`): Runs on PRs

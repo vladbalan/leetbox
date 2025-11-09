@@ -2,7 +2,7 @@ import { spawn } from "node:child_process"
 import { join } from "node:path"
 import { describe, expect, it } from "vitest"
 
-const CLI_PATH = join(__dirname, "leetbox.js")
+const CLI_PATH = join(__dirname, "leetbox.cjs")
 const PROJECT_ROOT = join(__dirname, "..")
 
 /**
