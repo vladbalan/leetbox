@@ -107,7 +107,7 @@ The scaffolder writes `impl/variants/<camel>.ts` with a `<camel>Variant` functio
 - [x] Interactive UX: pick a problem when you omit the name; add/remove problem and variant scaffolding
 - [x] Time complexity benchmarks
 - [ ] Space complexity benchmarks
-- [ ] TypeScript types for inputs and expected outputs (clean up the `any`'s)
+- [x] TypeScript types for inputs and expected outputs (clean up the `any`'s)
 
 ## Master the fundamentals
 
